@@ -1,0 +1,176 @@
+:root[data-theme="dark"] {
+    --bg: #090c11;
+    --panel: #000000;
+    --border: #313b4a;
+    --tile: #242e3b;
+    --tile-hover: #181d24;
+    --text: #e6e9ee;
+    --text-muted: #8b96a8;
+}
+
+:root[data-theme="light"] {
+    --bg: #f4f5f7;
+    --panel: #ffffff;
+    --border: #e1e4e9;
+    --tile: #eef0f3;
+    --tile-hover: #bfbfc0;
+    --text: #1b1f27;
+    --text-muted: #6b7280;
+}
+
+:root {
+    --accent-start: #4fd1b8;
+    --accent-last: #ff8f66;
+    --accent-active: #05070a;
+    --accent-visited: #4f7ea8;
+    --accent-deadend: #8a6a5a;
+    --accent-path: #f2b544;
+}
+
+:root[data-theme="light"] {
+    --accent-active: #2b2f38;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#themeToggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background-color: var(--panel);
+    color: var(--text);
+    font-size: 15px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.2s ease;
+}
+
+#themeToggle:hover {
+    border-color: var(--accent-start);
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 28px;
+    background-color: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+/* --- grid --- */
+
+#grid {
+    display: grid;
+    grid-template-columns: repeat(var(--size), 1fr);
+    height: fit-content;
+    width: fit-content;
+    gap: 2px;
+    padding: 2px;
+    background-color: var(--border);
+    border-radius: 4px;
+}
+
+.tile {
+    height: 48px;
+    width: 48px;
+    background-color: var(--tile);
+    border-radius: 2px;
+    transition: background-color 0.15s ease;
+}
+
+.tile:hover {
+    background-color: var(--tile-hover);
+    cursor: pointer;
+}
+
+.first,
+.last {
+    height: 48px;
+    width: 48px;
+    border-radius: 2px;
+}
+
+.first { background-color: var(--accent-start); }
+.last  { background-color: var(--accent-last); }
+
+.active {
+    background-color: var(--accent-active);
+    cursor: pointer;
+}
+
+.visited { background-color: var(--accent-visited); }
+.deadend { background-color: var(--accent-deadend); }
+.path    { background-color: var(--accent-path); }
+
+/* --- controls --- */
+
+.controls {
+    display: flex;
+    gap: 8px;
+}
+
+button {
+    font-family: inherit;
+    font-size: 13px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background-color: transparent;
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+button:hover {
+    border-color: var(--accent-start);
+    background-color: var(--tile-hover);
+}
+
+button.primary {
+    background-color: var(--accent-path);
+    border-color: var(--accent-path);
+    color: #241a06;
+}
+
+button.primary:hover {
+    filter: brightness(1.08);
+}
+
+/* wall-drawing mode is currently on */
+button.active-mode {
+    background-color: var(--accent-active-mode, var(--accent-start));
+    border-color: var(--accent-start);
+    color: #06201b;
+    box-shadow: 0 0 0 1px var(--accent-start), 0 0 14px -2px var(--accent-start);
+}
+
+button.active-mode:hover {
+    filter: brightness(1.05);
+}

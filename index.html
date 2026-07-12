@@ -1,13 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>Pathfinder</title>
 </head>
 <body>
-    <div class="main">
+    <button id="themeToggle" type="button" aria-label="Toggle light and dark mode">◐</button>
 
-    </div>
+    <main class="panel">
+        <h1>DFS Pathfinder</h1>
+
+        <div id="grid"></div>
+
+        <div class="controls">
+            <button id="addWalls" type="button">Add walls</button>
+            <button id="start" type="button" class="primary">Start</button>
+        </div>
+    </main>
+
+    <script>
+        // Theme toggle — reads/writes a data-theme attribute on <html>,
+        // which style.css uses to switch the CSS variable palette.
+        const themeToggle = document.getElementById('themeToggle');
+        const root = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            root.setAttribute('data-theme', savedTheme);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            root.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        });
+    </script>
+    <script src="main.js"></script>
 </body>
 </html>
