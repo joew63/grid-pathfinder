@@ -1,4 +1,4 @@
-import { recursiveTile } from './algorithms/dfs.js';
+import { dfsRecursion } from './algorithms/dfs.js';
 
 const grid = document.getElementById('grid');
 const fragment = document.createDocumentFragment();
@@ -87,7 +87,7 @@ startBtn.addEventListener('click', async () => {
     path.length = 0;
 
 
-    const success = await recursiveTile(0, 0, rows, size, path);
+    const success = await dfsRecursion(0, 0, rows, size, path);
 
     if (success) {
         path.forEach(([r, c]) => {

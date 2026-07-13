@@ -1,6 +1,6 @@
 import { sleep } from '../utils.js';
 
-export async function recursiveTile(row, column, rows, size, path) {
+export async function dfsRecursion(row, column, rows, size, path) {
     if (
         row >= size || row < 0 ||
         column < 0 || column >= size ||
@@ -19,10 +19,10 @@ export async function recursiveTile(row, column, rows, size, path) {
     }
 
     const found =
-        (await recursiveTile(row - 1, column, rows, size, path)) ||
-        (await recursiveTile(row, column - 1, rows, size, path)) ||
-        (await recursiveTile(row, column + 1, rows, size, path)) ||
-        (await recursiveTile(row + 1, column, rows, size, path));
+        (await dfsRecursion(row + 1, column, rows, size, path)) ||  // down
+        (await dfsRecursion(row, column + 1, rows, size, path)) ||  // right
+        (await dfsRecursion(row - 1, column, rows, size, path)) ||  // up
+        (await dfsRecursion(row, column - 1, rows, size, path));    // left
 
     if (!found) {
         path.pop();
