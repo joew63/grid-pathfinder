@@ -1,3 +1,5 @@
+import { recursiveTile } from './algorithms/dfs.js';
+
 const grid = document.getElementById('grid');
 const fragment = document.createDocumentFragment();
 const wallsBtn = document.getElementById('addWalls');
@@ -6,10 +8,6 @@ const startBtn = document.getElementById('start');
 let addingWalls = false;
 
 let size = 7;
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 document.documentElement.style.setProperty('--size', size);
 
@@ -83,9 +81,13 @@ startBtn.addEventListener('click', async () => {
     children.forEach(tile => {
         tile.classList.remove('visited', 'deadend', 'path');
     });
+
+    const path = [];
+
     path.length = 0;
 
-    const success = await recursiveTile(0, 0);
+
+    const success = await recursiveTile(0, 0, rows, size, path);
 
     if (success) {
         path.forEach(([r, c]) => {
@@ -96,39 +98,3 @@ startBtn.addEventListener('click', async () => {
         console.log('No path found');
     }
 });
-
-const path = [];
-
-async function recursiveTile(row, column) {
-    if (
-        row >= size || row < 0 ||
-        column < 0 || column >= size ||
-        rows[row][column].classList.contains('active') ||
-        rows[row][column].classList.contains('visited')
-    ) {
-        return false;
-    }
-
-    rows[row][column].classList.add('visited');
-    path.push([row, column]);
-    await sleep(50); // pause so you can see this tile light up
-
-    if (rows[row][column].classList.contains('last')) {
-        return true;
-    }
-
-    const found =
-        (await recursiveTile(row - 1, column)) ||
-        (await recursiveTile(row, column - 1)) ||
-        (await recursiveTile(row, column + 1)) ||
-        (await recursiveTile(row + 1, column));
-
-    if (!found) {
-        path.pop();
-        rows[row][column].classList.remove('visited');
-        rows[row][column].classList.add('deadend');
-        await sleep(100); // pause so you can see the backtrack too
-    }
-
-    return found;
-}
