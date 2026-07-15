@@ -1,9 +1,12 @@
 import { dfsRecursion } from './algorithms/dfs.js';
+import { bfs } from './algorithms/bfs.js'
 
 const grid = document.getElementById('grid');
 const fragment = document.createDocumentFragment();
 const wallsBtn = document.getElementById('addWalls');
 const startBtn = document.getElementById('start');
+const selectAlgo = document.getElementById('algorithms');
+const clearBtn = document.getElementById('clear');
 
 let addingWalls = false;
 
@@ -67,6 +70,12 @@ function setWallsMode(tiles, on) {
     });
 }
 
+clearBtn.addEventListener('click', () => {
+    children.forEach(tile => {
+        tile.classList.remove('visited', 'deadend', 'path');
+    });
+})
+
 wallsBtn.addEventListener('click', () => {
     children.forEach(tile => {
         tile.classList.remove('visited', 'deadend', 'path');
@@ -78,18 +87,23 @@ wallsBtn.addEventListener('click', () => {
 });
 
 startBtn.addEventListener('click', async () => {
+    const selectedAlgo = selectAlgo.value;
+
     children.forEach(tile => {
         tile.classList.remove('visited', 'deadend', 'path');
     });
 
-    const path = [];
+    let path;
 
-    path.length = 0;
+    if (selectedAlgo === 'dfs') {
+        path = [];
+        const success = await dfsRecursion(0, 0, rows, size, path);
+        if (!success) path = null;
+    } else if (selectedAlgo === 'bfs') {
+        path = await bfs(0, 0, rows, size);
+    }
 
-
-    const success = await dfsRecursion(0, 0, rows, size, path);
-
-    if (success) {
+    if (path) {
         path.forEach(([r, c]) => {
             rows[r][c].classList.add('path');
         });
