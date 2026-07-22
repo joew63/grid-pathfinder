@@ -10,7 +10,7 @@ const clearBtn = document.getElementById('clear');
 
 let addingWalls = false;
 
-let size = 7;
+let size = 8;
 
 document.documentElement.style.setProperty('--size', size);
 
@@ -72,7 +72,7 @@ function setWallsMode(tiles, on) {
 
 clearBtn.addEventListener('click', () => {
     children.forEach(tile => {
-        tile.classList.remove('visited', 'deadend', 'path');
+        tile.classList.remove('visited', 'deadend', 'path', 'active');
     });
 })
 
