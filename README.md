@@ -35,7 +35,9 @@ Both algorithms treat tiles with the `active` class (walls) as blocked and pause
 
 ## Running it
 
-This is a static site with no build step or dependencies. Just serve the folder and open it in a browser — for example:
+This is a static site with no build step or dependencies. Easiest option: just open `index.html` directly in a browser (double-click it, or right-click → Open With).
+
+If you'd rather serve it locally (e.g. to avoid any module/CORS quirks some browsers apply to `file://` pages), that works too:
 
 ```bash
 npx serve .
