@@ -2,8 +2,6 @@
 
 A small interactive visualizer for pathfinding algorithms on a grid. Draw walls, pick BFS or DFS, and watch the search explore the grid tile by tile before tracing out the final path.
 
-![status](https://img.shields.io/badge/status-just%20for%20fun-blue)
-
 ## Features
 
 - **Two algorithms** — switch between Breadth-First Search and (recursive) Depth-First Search from a dropdown
