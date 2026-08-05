@@ -18,15 +18,25 @@
         <div id="grid"></div>
 
         <div class="controls">
-            <select name="algorithms" id="algorithms">
-                <option value="dfs">DFS</option>
-                <option value="bfs">BFS</option>
-            </select>
-            <button id="addWalls" type="button">Add walls</button>
-            <button id="clear" type="button">Clear</button>
-            <button id="start" type="button" class="primary">Start</button>
+            <div class="controls-row">
+                <select name="algorithms" id="algorithms">
+                    <option value="dfs">DFS</option>
+                    <option value="bfs">BFS</option>
+                </select>
+                <div class="size-control">
+                    <label for="sizeInput">Size:</label>
+                    <input type="number" id="sizeInput" min="3" max="25" value="8">
+                </div>
+                <button id="resizeBtn" type="button">New board</button>
+            </div>
+            <div class="controls-row">
+                <button id="addWalls" type="button">Add walls</button>
+                <button id="clear" type="button">Clear</button>
+                <button id="start" type="button" class="primary">Start</button>
+            </div>
         </div>
-        <div>Press clear twice to get clear the walls</div>
+
+        <div id="status" class="status"></div>
     </main>
 
     <script>
