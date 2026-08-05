@@ -2,8 +2,6 @@
 
 A small interactive visualizer for pathfinding algorithms on a grid. Draw walls, pick BFS or DFS, and watch the search explore the grid tile by tile before tracing out the final path.
 
-## Demo
-
 ![Demo of Grid Pathfinder: drawing walls, running BFS, and highlighting the found path](assets/demo.gif)
 
 ## Features
