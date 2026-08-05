@@ -2,6 +2,10 @@
 
 A small interactive visualizer for pathfinding algorithms on a grid. Draw walls, pick BFS or DFS, and watch the search explore the grid tile by tile before tracing out the final path.
 
+## Demo
+
+<video src="assets/demo.mp4" controls width="440"></video>
+
 ## Features
 
 - **Two algorithms** — switch between Breadth-First Search and (recursive) Depth-First Search from a dropdown
