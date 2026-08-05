@@ -5,20 +5,22 @@ A small interactive visualizer for pathfinding algorithms on a grid. Draw walls,
 ## Features
 
 - **Two algorithms** — switch between Breadth-First Search and (recursive) Depth-First Search from a dropdown
+- **Adjustable board size** — enter a size (3–25) and click "New board" to rebuild the grid at that dimension; the board itself always renders at the same fixed pixel size, so tiles just scale to fit
 - **Wall drawing mode** — toggle "Add walls" and click tiles to mark them as obstacles the search can't cross
 - **Animated search** — visited tiles and dead ends light up in real time as the algorithm runs
-- **Path highlighting** — once the goal is found, the shortest/found path is traced across the grid
-- **Clear button** — reset visited/dead-end/path styling without erasing your walls
+- **Path highlighting** — once the goal is found, the found path is traced across the grid
+- **No-path detection** — if the goal is unreachable, a status message says so instead of leaving you guessing
+- **Two-stage Clear button** — first click clears the search/path styling only; the button relabels itself to "Clear walls" and a second click wipes the walls too
 - **Light / dark theme toggle** — persisted across visits via `localStorage`
 
 ## How it works
 
-The grid is an 8x8 set of tiles. The top-left tile is the start (`.first`), the bottom-right tile is the goal (`.last`). Clicking **Start** runs the selected algorithm from the start tile:
+The grid is a size×size set of tiles (default 8x8, adjustable via the size input). The top-left tile is the start (`.first`), the bottom-right tile is the goal (`.last`). Clicking **Start** turns off wall-drawing mode if it's on, then runs the selected algorithm from the start tile:
 
 - **BFS** (`bfs.js`) explores level by level using a queue, tracking each tile's predecessor so it can reconstruct the shortest path once it reaches the goal.
-- **DFS** (`dfs.js`) explores recursively, marking tiles as visited or dead ends as it backtracks, and returns the first path it finds to the goal.
+- **DFS** (`dfs.js`) explores recursively, marking tiles as visited (and additionally as dead ends when it backtracks) so it never re-enters a tile it has already explored, and returns the first path it finds to the goal.
 
-Both algorithms treat tiles with the `active` class (walls) as blocked and pause briefly (`sleep(10)` in `utils.js`) between steps so the search is visible instead of instant.
+Both algorithms treat tiles with the `active` class (walls) as blocked and pause briefly (`sleep(10)` in `utils.js`) between steps so the search is visible instead of instant. If neither algorithm can reach the goal, `main.js` shows a "No path exists" message.
 
 ## Project structure
 
@@ -49,14 +51,15 @@ Then visit the printed local URL.
 
 ## Usage
 
-1. Click **Add walls**, then click tiles to mark them as obstacles. Click **Add walls** again to exit wall mode.
-2. Pick **DFS** or **BFS** from the dropdown.
-3. Click **Start** to run the search and watch it animate.
-4. Click **Clear** to reset the visualization (walls stay in place).
+1. (Optional) Enter a board size and click **New board** to rebuild the grid at that size.
+2. Click **Add walls**, then click tiles to mark them as obstacles. Click **Add walls** again to exit wall mode.
+3. Pick **DFS** or **BFS** from the dropdown.
+4. Click **Start** to run the search and watch it animate.
+5. Click **Clear** once to reset the search visualization, or twice to also clear the walls.
 
 ## Ideas for future improvements
 
-- Adjustable grid size and animation speed
+- Adjustable animation speed
 - Draggable start/end tiles
 - Additional algorithms (A*, Dijkstra, greedy best-first)
 - Diagonal movement option
