@@ -70,16 +70,27 @@ function setWallsMode(tiles, on) {
     });
 }
 
+let clearStage = 0;
+
 clearBtn.addEventListener('click', () => {
-    children.forEach(tile => {
-        tile.classList.remove('visited', 'deadend', 'path', 'active');
-    });
+    if (clearStage == 0) {
+        children.forEach(tile => {
+            tile.classList.remove('visited', 'deadend', 'path');
+        });
+        clearStage = 1;
+    } else {
+        children.forEach(tile => {
+            tile.classList.remove('visited', 'deadend', 'path', 'active');
+        });
+        clearStage = 0;
+    }
 })
 
 wallsBtn.addEventListener('click', () => {
     children.forEach(tile => {
         tile.classList.remove('visited', 'deadend', 'path');
     });
+    clearStage = 0;
     addingWalls = !addingWalls;
     wallsBtn.classList.toggle('active-mode', addingWalls); // glow the button while wall mode is on
     const tiles = [...document.getElementsByClassName('tile')];
@@ -89,9 +100,17 @@ wallsBtn.addEventListener('click', () => {
 startBtn.addEventListener('click', async () => {
     const selectedAlgo = selectAlgo.value;
 
+    if (addingWalls) {
+        addingWalls = false;
+        wallsBtn.classList.remove('active-mode');
+        const tiles = [...document.getElementsByClassName('tile')];
+        setWallsMode(tiles, addingWalls);
+    }
+
     children.forEach(tile => {
         tile.classList.remove('visited', 'deadend', 'path');
     });
+    clearStage = 0;
 
     let path;
 
