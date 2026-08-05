@@ -26,7 +26,6 @@ export async function dfsRecursion(row, column, rows, size, path) {
 
     if (!found) {
         path.pop();
-        rows[row][column].classList.remove('visited');
         rows[row][column].classList.add('deadend');
         await sleep(10); // pause so you can see the backtrack too
     }
