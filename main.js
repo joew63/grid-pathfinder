@@ -16,6 +16,7 @@ let clearStage = 0;
 let size = 8;
 let children = [];
 let rows = [];
+let draggedEndpoint = null; // 'first' | 'last' | null — which endpoint is mid-drag
 
 // named handler so we can add/remove the SAME reference later
 function toggleTileActive(e) {
@@ -43,6 +44,85 @@ function setWallsMode(tiles, on) {
     });
 }
 
+function getRowCol(tile) {
+    const value = Number(tile.dataset.index);
+    return [Math.floor(value / size), value % size];
+}
+
+function handleDragStart(e) {
+    if (addingWalls) {
+        e.preventDefault(); // don't let a drag start while wall mode is on
+        return;
+    }
+    if (e.target.classList.contains('first')) {
+        draggedEndpoint = "first";
+    } else {
+        draggedEndpoint = "last";
+    }
+    e.dataTransfer.effectAllowed = 'move';
+}
+
+function handleDragOver(e) {
+    if (!draggedEndpoint) return;
+
+    if (!e.target.classList.contains('active')) {
+        e.preventDefault();
+        e.target.classList.add('drag-over');
+    }
+}
+
+function handleDragLeave(e) {
+    e.target.classList.remove('drag-over');
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    if (!draggedEndpoint) return;
+
+    const target = e.target;
+    target.classList.remove('drag-over');
+
+    const otherEndpoint = draggedEndpoint === 'first' ? 'last' : 'first';
+    const oldTile = grid.querySelector(`.${draggedEndpoint}`);
+    const isValidTile = target.classList.contains('tile') || target.classList.contains(otherEndpoint);
+
+    if (!isValidTile || target.classList.contains('active') || target === oldTile) {
+        draggedEndpoint = null;
+        return;
+    }
+
+    if (target.classList.contains(otherEndpoint)) {
+        // dropped onto the other endpoint — swap them instead of just moving
+        target.classList.remove(otherEndpoint);
+        target.classList.add(draggedEndpoint);
+
+        oldTile.classList.remove(draggedEndpoint);
+        oldTile.classList.add(otherEndpoint);
+    } else {
+        // normal move onto an empty tile
+        oldTile.classList.remove(draggedEndpoint);
+        oldTile.classList.add('tile');
+        oldTile.draggable = false;
+
+        target.classList.remove('tile');
+        target.classList.add(draggedEndpoint);
+        target.draggable = true;
+    }
+
+    children.forEach(tile => {
+        tile.classList.remove('visited', 'deadend', 'path');
+    });
+    setClearStage(0);
+    setStatus('');
+
+    draggedEndpoint = null;
+}
+
+function handleDragEnd() {
+    draggedEndpoint = null;
+    document.querySelectorAll('.drag-over').forEach(tile => tile.classList.remove('drag-over'));
+}
+
 function buildGrid(newSize) {
     size = newSize;
     document.documentElement.style.setProperty('--size', size);
@@ -65,8 +145,10 @@ function buildGrid(newSize) {
 
     first.classList.add('first');
     first.classList.remove('tile')
+    first.draggable = true;
     last.classList.add('last');
     last.classList.remove('tile')
+    last.draggable = true;
 
     children = [...grid.children];
 
@@ -92,6 +174,12 @@ function buildGrid(newSize) {
 }
 
 buildGrid(size);
+
+grid.addEventListener('dragstart', handleDragStart);
+grid.addEventListener('dragover', handleDragOver);
+grid.addEventListener('dragleave', handleDragLeave);
+grid.addEventListener('drop', handleDrop);
+grid.addEventListener('dragend', handleDragEnd);
 
 resizeBtn.addEventListener('click', () => {
     let newSize = parseInt(sizeInput.value, 10);
@@ -145,13 +233,14 @@ startBtn.addEventListener('click', async () => {
     setStatus('');
 
     let path;
+    const [startRow, startCol] = getRowCol(grid.querySelector('.first'));
 
     if (selectedAlgo === 'dfs') {
         path = [];
-        const success = await dfsRecursion(0, 0, rows, size, path);
+        const success = await dfsRecursion(startRow, startCol, rows, size, path);
         if (!success) path = null;
     } else if (selectedAlgo === 'bfs') {
-        path = await bfs(0, 0, rows, size);
+        path = await bfs(startRow, startCol, rows, size);
     }
 
     if (path) {
