@@ -8,6 +8,7 @@ A small interactive visualizer for pathfinding algorithms on a grid. Draw walls,
 
 - **Two algorithms** — switch between Breadth-First Search and (recursive) Depth-First Search from a dropdown
 - **Adjustable board size** — enter a size (3–25) and click "New board" to rebuild the grid at that dimension; the board itself always renders at the same fixed pixel size, so tiles just scale to fit
+- **Draggable start/end tiles** — drag the start or goal tile to any other open tile to reposition it; dropping one directly onto the other swaps them. Walls can't be dropped on, and dragging is disabled while wall-drawing mode is active
 - **Wall drawing mode** — toggle "Add walls" and click tiles to mark them as obstacles the search can't cross
 - **Animated search** — visited tiles and dead ends light up in real time as the algorithm runs
 - **Path highlighting** — once the goal is found, the found path is traced across the grid
@@ -17,7 +18,7 @@ A small interactive visualizer for pathfinding algorithms on a grid. Draw walls,
 
 ## How it works
 
-The grid is a size×size set of tiles (default 8x8, adjustable via the size input). The top-left tile is the start (`.first`), the bottom-right tile is the goal (`.last`). Clicking **Start** turns off wall-drawing mode if it's on, then runs the selected algorithm from the start tile:
+The grid is a size×size set of tiles (default 8x8, adjustable via the size input). The top-left tile starts as the start (`.first`) and the bottom-right tile as the goal (`.last`), but either can be dragged to any other non-wall tile to reposition it — dragging one onto the other swaps them. Clicking **Start** turns off wall-drawing mode if it's on, then runs the selected algorithm from wherever the start tile currently is:
 
 - **BFS** (`bfs.js`) explores level by level using a queue, tracking each tile's predecessor so it can reconstruct the shortest path once it reaches the goal.
 - **DFS** (`dfs.js`) explores recursively, marking tiles as visited (and additionally as dead ends when it backtracks) so it never re-enters a tile it has already explored, and returns the first path it finds to the goal.
@@ -54,14 +55,14 @@ Then visit the printed local URL.
 ## Usage
 
 1. (Optional) Enter a board size and click **New board** to rebuild the grid at that size.
-2. Click **Add walls**, then click tiles to mark them as obstacles. Click **Add walls** again to exit wall mode.
-3. Pick **DFS** or **BFS** from the dropdown.
-4. Click **Start** to run the search and watch it animate.
-5. Click **Clear** once to reset the search visualization, or twice to also clear the walls.
+2. (Optional) Drag the start or goal tile to reposition it — drop it on another tile to move it, or on the other endpoint to swap them.
+3. Click **Add walls**, then click tiles to mark them as obstacles. Click **Add walls** again to exit wall mode.
+4. Pick **DFS** or **BFS** from the dropdown.
+5. Click **Start** to run the search and watch it animate.
+6. Click **Clear** once to reset the search visualization, or twice to also clear the walls.
 
 ## Ideas for future improvements
 
 - Adjustable animation speed
-- Draggable start/end tiles
 - Additional algorithms (A*, Dijkstra, greedy best-first)
 - Diagonal movement option
